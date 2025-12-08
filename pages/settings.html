@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SETTINGS - VIBE COLLAB</title>
+    <link rel="stylesheet" href="../css/style.css" />
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-left desktop-only">
+            <a href="../index.html">DISCOVER</a>
+        </div>
+        <div class="logo" onclick="window.location.href='../index.html'">
+            <div class="moon-icon">☾</div>
+            <span>VIBE COLLAB</span>
+        </div>
+        <div class="nav-right desktop-only">
+            <a href="#" id="logout-link">LOGOUT</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-wrapper">
+            <h3>ACCOUNT SETTINGS</h3>
+            <form id="settings-form">
+                <div class="input-group">
+                    <label>THEME</label>
+                    <select id="theme-select"
+                        style="width:100%; padding: 12px 0; border:none; border-bottom:1px solid #ccc; background:transparent; font-family:inherit;">
+                        <option value="light">LIGHT MODE</option>
+                        <option value="dark">DARK MODE</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>NOTIFICATIONS</label>
+                    <div style="padding: 10px 0;">
+                        <input type="checkbox" id="notif-check" style="width:auto; margin-right:10px;">
+                        <span style="font-size:12px; font-weight:600;">ENABLE EMAIL NOTIFICATIONS</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>PUBLIC PROFILE</label>
+                    <div style="padding: 10px 0;">
+                        <input type="checkbox" id="public-check" style="width:auto; margin-right:10px;">
+                        <span style="font-size:12px; font-weight:600;">VISIBLE TO OTHERS</span>
+                    </div>
+                </div>
+
+                <button type="submit">SAVE CHANGES</button>
+            </form>
+
+            <button id="clear-data-btn" style="margin-top:40px; background:red; border:none; color:white;">DELETE MY
+                DATA</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="copy">© 2025 VIBE COLLAB</div>
+    </footer>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/script.js"></script>
+    <script>
+        // Guard Check
+        if (!getCurrentUser()) {
+            window.location.href = 'login.html';
+        }
+
+        const user = getCurrentUser();
+        const data = getUserData();
+
+        // Populate
+        if (data && data.settings) {
+            document.getElementById('theme-select').value = data.settings.theme || 'light';
+            document.getElementById('notif-check').checked = data.settings.notifications;
+            document.getElementById('public-check').checked = data.settings.publicProfile;
+        }
+
+        // Save
+        document.getElementById('settings-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const theme = document.getElementById('theme-select').value;
+            const notifications = document.getElementById('notif-check').checked;
+            const publicProfile = document.getElementById('public-check').checked;
+
+            updateUserData({
+                settings: { theme, notifications, publicProfile }
+            });
+
+            // Apply theme immediately
+            localStorage.setItem('vibe_theme', theme);
+            location.reload();
+        });
+
+        // Logout
+        document.getElementById('logout-link').onclick = (e) => {
+            e.preventDefault();
+            logout();
+        };
+
+        // Delete Data
+        document.getElementById('clear-data-btn').onclick = (e) => {
+            if (confirm('Are you sure? This will delete your personal preference database.')) {
+                localStorage.removeItem(user.dbKey);
+                alert('Data deleted.');
+                location.reload();
+            }
+        };
+    </script>
+</body>
+
+</html>

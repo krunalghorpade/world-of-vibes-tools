@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LOGIN - VIBE COLLAB</title>
+    <link rel="stylesheet" href="../css/style.css" />
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-left desktop-only">
+            <a href="../index.html">DISCOVER</a>
+        </div>
+        <div class="logo" onclick="window.location.href='../index.html'">
+            <div class="moon-icon">☾</div>
+            <span>VIBE COLLAB</span>
+        </div>
+        <div class="nav-right desktop-only">
+            <a href="signup.html">JOIN US</a>
+        </div>
+    </nav>
+
+    <div class="container" style="min-height: 60vh; display: flex; align-items: center; justify-content: center;">
+        <div class="form-wrapper">
+            <h3>LOGIN</h3>
+            <form id="login-form">
+                <div class="input-group">
+                    <label>USERNAME</label>
+                    <input type="text" id="username" required />
+                </div>
+                <div class="input-group">
+                    <label>PASSWORD</label>
+                    <input type="password" id="password" required />
+                </div>
+                <button type="submit">LOGIN</button>
+                <p style="margin-top:20px; font-size:11px;">NEW HERE? <a href="signup.html"
+                        style="color:var(--text-primary); font-weight:bold;">CREATE ACCOUNT</a></p>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="copy">© 2025 VIBE COLLAB</div>
+    </footer>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/script.js"></script>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value;
+
+            const res = login(user, pass);
+            if (res.success) {
+                window.location.href = '../index.html';
+            } else {
+                alert(res.message);
+            }
+        });
+    </script>
+</body>
+
+</html>

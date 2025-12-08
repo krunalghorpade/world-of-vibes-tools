@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MARINE VIBES – Collaborative Network</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+    <!-- Top Announcement Bar -->
+    <div class="top-bar">
+        <span>COLLABORATE WORLDWIDE | FIND YOUR PERFECT MATCH TODAY</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-left desktop-only">
+            <a href="index.html">DISCOVER</a>
+            <a href="#">ARTISTS</a>
+            <a href="#">PRODUCERS</a>
+        </div>
+        <div class="logo" onclick="window.location.href='index.html'">
+            <div class="moon-icon">☾</div>
+            <span>VIBE COLLAB</span>
+        </div>
+        <div class="nav-right desktop-only">
+            <!-- Injected by JS based on Auth ID -->
+            <a href="pages/signup.html" id="create-profile-link">JOIN US</a>
+            <a href="#">SEARCH</a>
+            <a href="pages/login.html">LOGIN</a>
+        </div>
+        <div class="mobile-menu-icon mobile-only">☰</div>
+    </nav>
+
+    <!-- Split Hero Section -->
+
+
+    <!-- Main Content Area -->
+    <div class="container">
+
+        <!-- Filter/Title Section -->
+        <div class="section-header">
+            <h1 id="feed-title">LATEST PROFILES</h1>
+            <div class="filter-toggles">
+                <span class="active" onclick="filterBy('all')">ALL</span>
+                <span onclick="filterBy('needs')">SEEKING</span>
+                <span onclick="filterBy('offers')">OFFERING</span>
+            </div>
+        </div>
+
+        <!-- Masonry Grid -->
+        <div class="masonry-grid" id="artist-list">
+            <!-- Cards injected by JS -->
+        </div>
+
+        <!-- Profile Creation Section (Styled minimally) -->
+        <section id="create-profile" class="profile-creation">
+            <div class="form-wrapper">
+                <h3>CREATE YOUR ARTIST PROFILE</h3>
+                <form id="artist-form">
+                    <div class="input-group">
+                        <label>ARTIST NAME</label>
+                        <input type="text" id="name" name="name" required placeholder="ENTER NAME" />
+                    </div>
+                    <div class="input-group">
+                        <label>I NEED (COMMA SEPARATED)</label>
+                        <input type="text" id="wants" name="wants" placeholder="BEATS, VOCALS, MIXING" required />
+                    </div>
+                    <div class="input-group">
+                        <label>I CAN (COMMA SEPARATED)</label>
+                        <textarea id="skills" name="skills" placeholder="LYRICS, PRODUCTION, GUITAR"
+                            required></textarea>
+                    </div>
+                    <button type="submit">PUBLISH PROFILE</button>
+                </form>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">NEWSLETTER</a>
+            <a href="#">CONTACT</a>
+            <a href="#">LEGAL</a>
+        </div>
+        <div class="copy">© 2025 VIBE COLLAB</div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
