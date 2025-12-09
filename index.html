@@ -23,14 +23,20 @@
             <a href="#">PRODUCERS</a>
         </div>
         <div class="logo" onclick="window.location.href='index.html'">
-            <div class="moon-icon">☾</div>
+            <!-- Logo Icon removed from here -->
             <span>VIBE COLLAB</span>
         </div>
-        <div class="nav-right desktop-only">
-            <!-- Injected by JS based on Auth ID -->
-            <a href="pages/signup.html" id="create-profile-link">JOIN US</a>
-            <a href="#">SEARCH</a>
-            <a href="pages/login.html">LOGIN</a>
+        <div class="nav-right desktop-only" style="display:flex; align-items:center;">
+            <!-- Theme Toggle First -->
+            <div class="moon-icon">☀</div>
+
+            <!-- Auth Links Container -->
+            <div id="auth-links">
+                <!-- Injected by JS based on Auth ID -->
+                <a href="pages/signup.html" id="create-profile-link">JOIN US</a>
+                <a href="#">SEARCH</a>
+                <a href="pages/login.html">LOGIN</a>
+            </div>
         </div>
         <div class="mobile-menu-icon mobile-only">☰</div>
     </nav>
@@ -56,28 +62,7 @@
             <!-- Cards injected by JS -->
         </div>
 
-        <!-- Profile Creation Section (Styled minimally) -->
-        <section id="create-profile" class="profile-creation">
-            <div class="form-wrapper">
-                <h3>CREATE YOUR ARTIST PROFILE</h3>
-                <form id="artist-form">
-                    <div class="input-group">
-                        <label>ARTIST NAME</label>
-                        <input type="text" id="name" name="name" required placeholder="ENTER NAME" />
-                    </div>
-                    <div class="input-group">
-                        <label>I NEED (COMMA SEPARATED)</label>
-                        <input type="text" id="wants" name="wants" placeholder="BEATS, VOCALS, MIXING" required />
-                    </div>
-                    <div class="input-group">
-                        <label>I CAN (COMMA SEPARATED)</label>
-                        <textarea id="skills" name="skills" placeholder="LYRICS, PRODUCTION, GUITAR"
-                            required></textarea>
-                    </div>
-                    <button type="submit">PUBLISH PROFILE</button>
-                </form>
-            </div>
-        </section>
+
 
     </div>
 

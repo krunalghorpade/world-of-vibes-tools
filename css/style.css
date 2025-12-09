@@ -12,23 +12,7 @@
     --font-heading: 'Helvetica Neue', sans-serif;
     --font-body: 'Helvetica', sans-serif;
 
-    /* Light Mode Default */
-    --bg-primary: #ffffff;
-    --bg-secondary: #f4f4f4;
-    --bg-card: #ffffff;
-    --text-primary: #000000;
-    --text-secondary: #555555;
-    --border-color: #eeeeee;
-    --input-border: #cccccc;
-    --input-active: #000000;
-    --btn-bg: #000000;
-    --btn-text: #ffffff;
-    --btn-hover-bg: var(--neon-green);
-    --btn-hover-text: #000000;
-}
-
-/* Dark Mode Overrides */
-body.dark-mode {
+    /* Dark Mode Default */
     --bg-primary: #121212;
     --bg-secondary: #1e1e1e;
     --bg-card: #1e1e1e;
@@ -39,6 +23,22 @@ body.dark-mode {
     --input-active: #ffffff;
     --btn-bg: #ffffff;
     --btn-text: #000000;
+    --btn-hover-bg: var(--neon-green);
+    --btn-hover-text: #000000;
+}
+
+/* Light Mode Overrides */
+body.light-mode {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f4f4f4;
+    --bg-card: #ffffff;
+    --text-primary: #000000;
+    --text-secondary: #555555;
+    --border-color: #eeeeee;
+    --input-border: #cccccc;
+    --input-active: #000000;
+    --btn-bg: #000000;
+    --btn-text: #ffffff;
     --btn-hover-bg: var(--neon-green);
     --btn-hover-text: #000000;
 }
@@ -98,11 +98,13 @@ nav a {
 }
 
 .moon-icon {
-    font-size: 24px;
+    font-size: 20px;
     line-height: 1;
-    margin-bottom: 4px;
+    margin-right: 20px;
     cursor: pointer;
     transition: transform 0.3s;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .moon-icon:hover {

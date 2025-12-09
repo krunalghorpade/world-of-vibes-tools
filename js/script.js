@@ -13,31 +13,48 @@ function initTheme() {
     const moonIcon = document.querySelector('.moon-icon');
 
     // Check saved preference or user data
-    let isDark = localStorage.getItem('vibe_theme') === 'dark';
+    // Default to 'dark' if nothing is saved
+    const saved = localStorage.getItem('vibe_theme');
+    let isLight = -1; // -1 means check auth
 
-    // If logged in, check user specific setting
-    if (typeof getUserData === 'function') { // Check if auth.js is loaded
+    if (saved) {
+        isLight = (saved === 'light');
+    }
+
+    // If logged in, prioritize user setting
+    if (typeof getUserData === 'function') {
         const uData = getUserData();
         if (uData && uData.settings && uData.settings.theme) {
-            isDark = uData.settings.theme === 'dark';
+            isLight = (uData.settings.theme === 'light');
         }
     }
 
-    if (isDark) {
-        document.body.classList.add('dark-mode');
-        if (moonIcon) moonIcon.textContent = '☀';
+    // Fallback: Default Mode is DARK, so isLight implies adding class
+    // If isLight is still -1 (no saved, no auth), default to false (Dark)
+    if (isLight === -1) isLight = false;
+
+    if (isLight) {
+        document.body.classList.add('light-mode');
+        if (moonIcon) moonIcon.textContent = '☾'; // Moon needed to go back to dark
+    } else {
+        document.body.classList.remove('light-mode');
+        if (moonIcon) moonIcon.textContent = '☀'; // Sun indicates we are in dark mode (click for light) 
+        // Wait, usually icon represents current state or target state?
+        // If Dark Mode, icon usually Sun (to switch to light) or Moon (representing Night).
+        // Original code: moon textContent toggles.
+        // Let's stick: Dark Mode = ☀ (Sun to switch to light), Light Mode = ☾ (Moon to switch to dark)
     }
 
     if (moonIcon) {
         moonIcon.addEventListener('click', () => {
-            const isDarkMode = document.body.classList.toggle('dark-mode');
-            const theme = isDarkMode ? 'dark' : 'light';
+            const isLightMode = document.body.classList.toggle('light-mode');
+            const theme = isLightMode ? 'light' : 'dark';
 
             // Save global preference
             localStorage.setItem('vibe_theme', theme);
 
             // Update icon
-            moonIcon.textContent = isDarkMode ? '☀' : '☾';
+            moonIcon.textContent = isLightMode ? '☾' : '☀';
 
             // If logged in, save to their DB
             if (typeof updateUserData === 'function' && getCurrentUser()) {
@@ -57,32 +74,46 @@ function initTheme() {
 function updateNavForAuth() {
     if (typeof getCurrentUser !== 'function') return;
 
-    const user = getCurrentUser();
-    const navRight = document.querySelector('.nav-right');
+    // We target #auth-links container now
+    const authContainer = document.getElementById('auth-links');
 
-    if (!navRight) return;
+    if (!authContainer) return;
+
+    const user = getCurrentUser();
 
     if (user) {
         // User is logged in
-        navRight.innerHTML = `
+        authContainer.innerHTML = `
             <a href="#">Welcome, ${user.username}</a>
             <a href="pages/settings.html">SETTINGS</a>
             <a href="#" id="logout-btn">LOGOUT</a>
         `;
 
-        document.getElementById('logout-btn').addEventListener('click', (e) => {
+        // Settings link might need adjustment if we are ALREADY in pages/
+        // Simple fix: check current path or use absolute/relative logic. 
+        // For simplicity: We assume relative from root. If in pages/, these links break?
+        // Actually, the structure uses absolute "pages/..." or "../index".
+        // Let's make paths robust.
+
+    } else {
+        // Guest - Check if we are in root or pages/ to set correct links
+        const inPages = window.location.pathname.includes('/pages/');
+        const prefix = inPages ? '' : 'pages/';
+
+        authContainer.innerHTML = `
+            <a href="${prefix}signup.html" id="create-profile-link">JOIN US</a>
+            <a href="#">SEARCH</a>
+            <a href="${prefix}login.html">LOGIN</a>
+        `;
+    }
+
+    // Attach listener if button exists
+    const btn = document.getElementById('logout-btn');
+    if (btn) {
+        btn.addEventListener('click', (e) => {
             e.preventDefault();
             logout(); // from auth.js
         });
-
-        // Maybe hide "Create Profile" if strictly enforced, but let's leave it
-    } else {
-        // Guest
-        navRight.innerHTML = `
-            <a href="pages/signup.html" id="create-profile-link">JOIN US</a>
-            <a href="#">SEARCH</a>
-            <a href="pages/login.html">LOGIN</a>
-        `;
     }
 }
 
