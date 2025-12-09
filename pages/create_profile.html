@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CREATE PROFILE - VIBE COLLAB</title>
+    <link rel="stylesheet" href="../css/style.css" />
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-left desktop-only">
+            <a href="../index.html">DISCOVER</a>
+        </div>
+        <div class="logo" onclick="window.location.href='../index.html'">
+            <span>VIBE COLLAB</span>
+        </div>
+        <div class="nav-right desktop-only" style="display:flex; align-items:center;">
+            <div class="moon-icon">☀</div>
+            <div id="auth-links">
+                <a href="#" id="logout-link">LOGOUT</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="min-height: 80vh; display: flex; align-items: center; justify-content: center;">
+        <div class="form-wrapper">
+            <h3>CREATE YOUR ARTIST PROFILE</h3>
+            <form id="artist-form">
+                <div class="input-group">
+                    <label>ARTIST NAME</label>
+                    <input type="text" id="name" name="name" required placeholder="ENTER NAME" />
+                </div>
+                <div class="input-group">
+                    <label>I NEED (COMMA SEPARATED)</label>
+                    <input type="text" id="wants" name="wants" placeholder="BEATS, VOCALS, MIXING" required />
+                </div>
+                <div class="input-group">
+                    <label>I CAN (COMMA SEPARATED)</label>
+                    <textarea id="skills" name="skills" placeholder="LYRICS, PRODUCTION, GUITAR" required></textarea>
+                </div>
+                <button type="submit">PUBLISH PROFILE</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="copy">© 2025 VIBE COLLAB</div>
+    </footer>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/script.js"></script>
+    <script>
+        // Gatekeeping
+        if (!getCurrentUser()) {
+            window.location.href = 'login.html';
+        }
+
+        // Logout Logic Local Override or rely on script.js? 
+        // script.js handles #logout-btn but here it might be #logout-link if I copied from settings.
+        // Let's standardise ids.
+        // In script.js: id="logout-btn" created dynamically.
+        // In static HTML above: id="logout-link".
+        // Let's run a small inline script to handle logout to be safe if script.js dynamic injection fails or overwrites.
+        // Actually script.js updates #auth-links innerHTML, so the hardcoded one above will be replaced.
+    </script>
+</body>
+
+</html>

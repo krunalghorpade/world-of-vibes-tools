@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PROFILE - VIBE COLLAB</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <script src="../js/auth.js"></script>
+    <script src="../js/script.js"></script>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-left desktop-only">
+            <a href="../index.html">DISCOVER</a>
+        </div>
+        <div class="logo" onclick="window.location.href='../index.html'">
+            <span>VIBE COLLAB</span>
+        </div>
+        <div class="nav-right desktop-only" style="display:flex; align-items:center;">
+            <div class="moon-icon">☀</div>
+            <div id="auth-links">
+                <a href="login.html">LOGIN</a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="profile-container">
+        <!-- Injected by JS -->
+        <div style="text-align:center; padding: 100px;">LOADING...</div>
+    </div>
+
+    <!-- Edit Button (Only visible if owner) -->
+    <div id="edit-float-btn" class="edit-btn-float" style="display:none;" onclick="startEditing()">
+        ✎
+    </div>
+
+    <!-- Edit Modal Overlay -->
+    <div id="edit-modal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:200; align-items:center; justify-content:center;">
+        <div class="form-wrapper"
+            style="background:var(--bg-card); padding:40px; border:1px solid var(--neon-green); width:90%; max-width:600px; max-height:90vh; overflow-y:auto;">
+            <h3>EDIT PROFILE</h3>
+            <form id="edit-form">
+                <div class="input-group">
+                    <label>BIO</label>
+                    <textarea id="edit-bio" rows="4"></textarea>
+                </div>
+                <div class="input-group">
+                    <label>SOCIALS (JSON format for now)</label>
+                    <input type="text" id="edit-socials" placeholder='{"instagram": "@..."}'>
+                </div>
+                <!-- Needs/Offers editing could be added here, but sticking to basic info for this step -->
+                <div class="input-group">
+                    <label>NEEDS (Comma Separated)</label>
+                    <input type="text" id="edit-wants">
+                </div>
+                <div class="input-group">
+                    <label>OFFERS (Comma Separated)</label>
+                    <input type="text" id="edit-skills">
+                </div>
+
+                <button type="submit">SAVE CHANGES</button>
+                <button type="button" onclick="document.getElementById('edit-modal').style.display='none'"
+                    style="margin-top:10px; background:grey;">CANCEL</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="copy">© 2025 VIBE COLLAB</div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const artistId = params.get('id');
+            const container = document.getElementById('profile-container');
+            const editBtn = document.getElementById('edit-float-btn');
+
+            // Check if looking at own profile
+            let isOwner = false;
+            if (typeof getCurrentUser === 'function') {
+                const uData = getUserData();
+                if (uData && uData.artistId === artistId) {
+                    isOwner = true;
+                    editBtn.style.display = 'flex';
+                }
+            }
+
+            if (!artistId) {
+                container.innerHTML = '<div style="text-align:center; padding:100px;">ARTIST NOT FOUND</div>';
+                return;
+            }
+
+            // We need to wait for script.js to mock data? Actually script.js runs on load.
+            // But we can't assume MOCK_DATA is ready if script.js deferred?
+            // script.js updates localStorage immediately.
+
+            const artist = getArtistById(artistId);
+
+            if (!artist) {
+                container.innerHTML = '<div style="text-align:center; padding:100px;">PROFILE NOT FOUND</div>';
+                return;
+            }
+
+            // Render Profile
+            const socialsHtml = artist.socials ? Object.entries(artist.socials).map(([k, v]) => `
+                <a href="#" target="_blank">${k.toUpperCase()}</a>
+            `).join('') : '';
+
+            const wantsHtml = (Array.isArray(artist.wants) ? artist.wants : []).map(w => `<div class="item-card">${w}</div>`).join('');
+            const skillsHtml = (Array.isArray(artist.skills) ? artist.skills : []).map(s => `<div class="item-card">${s}</div>`).join('');
+
+            container.innerHTML = `
+                <div class="profile-header">
+                    <img src="${artist.image}" class="profile-avatar" alt="${artist.name}" />
+                    <div class="profile-info">
+                        <h1>${artist.name}</h1>
+                        <p class="profile-bio">${artist.bio || 'No bio yet.'}</p>
+                        <div class="social-links">
+                            ${socialsHtml}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-sections">
+                    <div class="profile-section-half">
+                        <h2>SEEKING</h2>
+                        ${wantsHtml}
+                    </div>
+                    <div class="profile-section-half">
+                        <h2>OFFERING</h2>
+                        ${skillsHtml}
+                    </div>
+                </div>
+            `;
+
+            // Pre-fill edit form
+            if (isOwner) {
+                document.getElementById('edit-bio').value = artist.bio || '';
+                document.getElementById('edit-socials').value = JSON.stringify(artist.socials || {});
+                document.getElementById('edit-wants').value = Array.isArray(artist.wants) ? artist.wants.join(', ') : artist.wants;
+                document.getElementById('edit-skills').value = Array.isArray(artist.skills) ? artist.skills.join(', ') : artist.skills;
+
+                // Handle Save
+                document.getElementById('edit-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+
+                    const newBio = document.getElementById('edit-bio').value;
+                    let newSocials = {};
+                    try {
+                        newSocials = JSON.parse(document.getElementById('edit-socials').value);
+                    } catch (err) {
+                        alert('Invalid JSON for socials. Saving basic info only.');
+                    }
+
+                    const newWants = document.getElementById('edit-wants').value.split(',').map(s => s.trim()).filter(Boolean);
+                    const newSkills = document.getElementById('edit-skills').value.split(',').map(s => s.trim()).filter(Boolean);
+
+                    // Update LocalStorage
+                    const all = getAllArtists();
+                    const idx = all.findIndex(a => a.id === artistId);
+                    if (idx !== -1) {
+                        all[idx].bio = newBio;
+                        all[idx].socials = newSocials;
+                        all[idx].wants = newWants;
+                        all[idx].skills = newSkills;
+                        setAllArtists(all);
+                        alert('Profile Updated!');
+                        location.reload();
+                    }
+                });
+            }
+        });
+
+        function startEditing() {
+            document.getElementById('edit-modal').style.display = 'flex';
+        }
+    </script>
+</body>
+
+</html>

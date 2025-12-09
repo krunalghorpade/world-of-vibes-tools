@@ -7,40 +7,54 @@
 
 /* Typography & Colors Variables */
 :root {
-    --neon-green: #39FF14;
+    --brand-color: #140D4F;
+    /* Main Brand Color: Deep Blue/Purple */
+    --accent-color: #140D4F;
+    /* Replaces Neon Green */
+
     --nav-height: 80px;
     --font-heading: 'Helvetica Neue', sans-serif;
     --font-body: 'Helvetica', sans-serif;
 
-    /* Dark Mode Default */
-    --bg-primary: #121212;
-    --bg-secondary: #1e1e1e;
-    --bg-card: #1e1e1e;
-    --text-primary: #ffffff;
-    --text-secondary: #bbbbbb;
+    /* Palette: Slate Black & Chalk White */
+    --bg-primary: #1C1E22;
+    /* Slate Black */
+    --bg-secondary: #2B2B2B;
+    --bg-card: #26292E;
+
+    --text-primary: #F5F7FA;
+    /* Chalk White */
+    --text-secondary: #Aab2bd;
+    /* Muted Slate */
+
     --border-color: #333333;
     --input-border: #444444;
-    --input-active: #ffffff;
-    --btn-bg: #ffffff;
-    --btn-text: #000000;
-    --btn-hover-bg: var(--neon-green);
-    --btn-hover-text: #000000;
+    --input-active: #F5F7FA;
+
+    --btn-bg: #F5F7FA;
+    --btn-text: #140D4F;
+    --btn-hover-bg: #140D4F;
+    --btn-hover-text: #ffffff;
+
+    --btn-radius: 9999px;
+    /* Full Rounded */
 }
 
-/* Light Mode Overrides */
+/* Light Mode Overrides (Optional updates if needed, keeping standard) */
 body.light-mode {
     --bg-primary: #ffffff;
-    --bg-secondary: #f4f4f4;
+    --bg-secondary: #F0F4F8;
+    /* Light Chalk */
     --bg-card: #ffffff;
-    --text-primary: #000000;
+    --text-primary: #1C1E22;
     --text-secondary: #555555;
     --border-color: #eeeeee;
     --input-border: #cccccc;
-    --input-active: #000000;
-    --btn-bg: #000000;
+    --input-active: #140D4F;
+    --btn-bg: #140D4F;
     --btn-text: #ffffff;
-    --btn-hover-bg: var(--neon-green);
-    --btn-hover-text: #000000;
+    --btn-hover-bg: #F5F7FA;
+    --btn-hover-text: #140D4F;
 }
 
 body {
@@ -51,16 +65,9 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Top Announcement Bar */
+/* Top Announcement Bar - REMOVED */
 .top-bar {
-    background-color: var(--neon-green);
-    color: #000;
-    text-align: center;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 8px 0;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    display: none;
 }
 
 /* Navigation */
@@ -83,10 +90,29 @@ nav a {
     color: var(--text-primary);
     font-size: 12px;
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     margin: 0 15px;
     text-transform: uppercase;
+    transition: color 0.2s;
 }
+
+nav a:hover,
+nav a.active {
+    color: var(--accent-color);
+    /* Brand color highlight? It's dark, might be invisible on dark mode. */
+    /* If brand is #140D4F (Dark Blue), on #1C1E22 (Black), it is invisible. */
+    /* Use white or a lighter shade for hover in dark mode? */
+    /* Let's stick to Chalk White hover or text-secondary. */
+    opacity: 0.7;
+}
+
+/* Just override color for visibility */
+body:not(.light-mode) nav a:hover {
+    color: #fff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* ... (Logo and Icon styles unchanged) ... */
 
 .logo {
     display: flex;
@@ -121,81 +147,17 @@ nav a {
     display: none;
 }
 
-/* Split Hero Section */
-.split-hero {
-    display: flex;
-    width: 100%;
-    height: 85vh;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero-half {
-    width: 50%;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero-half img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-}
-
-.hero-half:hover img {
-    transform: scale(1.03);
-}
-
-.overlay-text {
-    position: absolute;
-    top: 20%;
-    left: 10%;
-    z-index: 2;
-    pointer-events: none;
-}
-
-.right-half .overlay-text {
-    left: 10%;
-}
-
-.overlay-text h2 {
-    font-size: 5rem;
-    color: var(--neon-green);
-    text-transform: uppercase;
-    font-weight: 700;
-    line-height: 0.9;
-    margin-bottom: 20px;
-    mix-blend-mode: exclusion;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-.overlay-text button {
-    pointer-events: auto;
-    background-color: var(--neon-green);
-    color: #000;
-    border: none;
-    padding: 12px 24px;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    cursor: pointer;
-    letter-spacing: 1px;
-    transition: background 0.2s;
-}
-
-.overlay-text button:hover {
-    background-color: #fff;
-}
+/* ... (Hero styles unchanged generally, but using vars) ... */
 
 /* Main Container */
 .container {
-    padding: 60px 20px;
-    max-width: 1600px;
+    padding: 60px 40px;
+    max-width: 1800px;
+    /* Increased max-width for 5 columns */
     margin: 0 auto;
 }
 
-/* Section Header */
+/* ... (Section Header styles) ... */
 .section-header {
     margin-bottom: 40px;
     text-align: center;
@@ -207,6 +169,7 @@ nav a {
     margin-bottom: 15px;
     letter-spacing: -1px;
     text-transform: uppercase;
+    color: var(--text-primary);
 }
 
 .filter-toggles span {
@@ -214,7 +177,7 @@ nav a {
     cursor: pointer;
     margin: 0 10px;
     font-size: 13px;
-    color: #888;
+    color: var(--text-secondary);
     text-transform: uppercase;
     font-weight: 600;
     border-bottom: 2px solid transparent;
@@ -224,45 +187,57 @@ nav a {
 
 .filter-toggles span:hover,
 .filter-toggles span.active {
-    color: var(--text-primary);
-    border-bottom: 2px solid var(--text-primary);
+    color: var(--accent-color);
+    border-bottom: 2px solid var(--accent-color);
 }
 
-/* Masonry Grid */
+/* Dark mode fix for accent visibility */
+body:not(.light-mode) .filter-toggles span:hover,
+body:not(.light-mode) .filter-toggles span.active {
+    color: #fff;
+    border-color: #fff;
+}
+
+/* Grid System - Updated to Flex/Grid 5 columns */
 .masonry-grid {
-    column-count: 4;
-    column-gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    /* Removed column-count */
+}
+
+@media (max-width: 1600px) {
+    .masonry-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
 }
 
 @media (max-width: 1200px) {
     .masonry-grid {
-        column-count: 3;
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
 @media (max-width: 900px) {
     .masonry-grid {
-        column-count: 2;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 600px) {
     .masonry-grid {
-        column-count: 1;
+        grid-template-columns: repeat(1, 1fr);
     }
 
-    .split-hero {
-        flex-direction: column;
-        height: auto;
+    /* Mobile adjustments... */
+    .carousel-content h2 {
+        font-size: 2.5rem;
     }
 
-    .hero-half {
-        width: 100%;
-        height: 60vh;
-    }
-
-    .overlay-text h2 {
-        font-size: 3rem;
+    .carousel-content {
+        bottom: 30px;
+        left: 20px;
+        right: 20px;
     }
 }
 
@@ -271,12 +246,17 @@ nav a {
     break-inside: avoid;
     background: var(--bg-card);
     margin-bottom: 20px;
-    border: 1px solid transparent;
-    transition: transform 0.3s;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-radius: 12px;
+    /* Slight rounding for cards */
+    overflow: hidden;
 }
 
 .artist-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-color);
 }
 
 .card-image-placeholder {
@@ -294,14 +274,14 @@ nav a {
 }
 
 .card-details {
-    padding: 15px 5px;
+    padding: 20px;
 }
 
 .card-details h3 {
-    font-size: 14px;
+    font-size: 16px;
     text-transform: uppercase;
-    font-weight: 700;
-    margin-bottom: 8px;
+    font-weight: 800;
+    margin-bottom: 10px;
     letter-spacing: 0.5px;
     color: var(--text-primary);
 }
@@ -309,7 +289,7 @@ nav a {
 .card-details p {
     font-size: 11px;
     color: var(--text-secondary);
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     line-height: 1.4;
     text-transform: uppercase;
 }
@@ -416,4 +396,305 @@ footer {
 .copy {
     color: #aaa;
     font-size: 10px;
+}
+
+/* ... (Existing CSS content) ... */
+
+/* Carousel Section */
+.hero-carousel {
+    width: 100%;
+    height: 60vh;
+    /* Reduced height as requested */
+    position: relative;
+    overflow: hidden;
+    background: #000;
+}
+
+.carousel-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-slide.active {
+    opacity: 1;
+    z-index: 1;
+}
+
+.carousel-slide img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.6;
+    /* Darken for text readability */
+}
+
+.carousel-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #fff;
+    max-width: 800px;
+    padding: 20px;
+}
+
+.carousel-content h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    color: var(--neon-green);
+    text-transform: uppercase;
+}
+
+.carousel-content p {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    font-weight: 600;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    color: #fff;
+}
+
+.carousel-btn {
+    background: var(--neon-green);
+    color: #000;
+    padding: 12px 30px;
+    border: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.carousel-btn:hover {
+    background: #fff;
+}
+
+/* 5 Column Grid */
+.masonry-grid {
+    column-count: 5;
+    column-gap: 20px;
+}
+
+@media (max-width: 1400px) {
+    .masonry-grid {
+        column-count: 4;
+    }
+}
+
+@media (max-width: 1100px) {
+    .masonry-grid {
+        column-count: 3;
+    }
+}
+
+@media (max-width: 800px) {
+    .masonry-grid {
+        column-count: 2;
+    }
+}
+
+@media (max-width: 500px) {
+    .masonry-grid {
+        column-count: 1;
+    }
+}
+
+/* Profile Page Styles */
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+    background: var(--bg-secondary);
+    text-align: center;
+}
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 3px solid var(--neon-green);
+}
+
+.profile-info h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+}
+
+.profile-bio {
+    max-width: 600px;
+    margin: 0 auto 20px;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.social-links a {
+    margin: 0 10px;
+    color: var(--text-primary);
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.profile-sections {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 40px;
+    gap: 40px;
+}
+
+.profile-section-half {
+    flex: 1;
+    min-width: 300px;
+}
+
+.profile-section-half h2 {
+    border-bottom: 2px solid var(--neon-green);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+}
+
+.item-card {
+    background: var(--bg-card);
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--neon-green);
+    color: var(--text-primary);
+}
+
+.edit-btn-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--neon-green);
+    color: #000;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 100;
+}/* Carousel Section with Bottom-Left Gradient Overlay and Text */
+.hero-carousel {
+    width: 100%;
+    height: 75vh;
+    position: relative;
+    overflow: hidden;
+    background: #000;
+}
+
+.carousel-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    cursor: pointer;
+}
+
+.carousel-slide.active {
+    opacity: 1;
+    z-index: 1;
+}
+
+.carousel-slide img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1;
+}
+
+/* Gradient Overlay: Dark Bottom-Left -> Lighter Top */
+.carousel-slide::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Dark at bottom (0.9 opacity), lighter towards top right */
+    background: linear-gradient(45deg, rgba(0, 0, 0, 0.9) 0%, rgba(20, 13, 79, 0.2) 100%);
+    pointer-events: none;
+}
+
+.carousel-content {
+    position: absolute;
+    bottom: 60px;
+    left: 60px;
+    z-index: 2;
+    text-align: left;
+    color: #fff;
+    max-width: 600px;
+    pointer-events: none;
+}
+
+.carousel-content h2 {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #fff;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+.carousel-content p {
+    font-size: 1.2rem;
+    margin-bottom: 0px;
+    font-weight: 500;
+    color: #ccc;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Hide Buttons in Carousel as requested */
+.carousel-btn {
+    display: none;
+}
+
+/* Global Form/Button Updates */
+input,
+textarea,
+select {
+    border-bottom: 1px solid var(--input-border);
+    color: var(--text-primary);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-bottom: 1px solid var(--brand-color);
+}
+
+button,
+.btn {
+    border-radius: var(--btn-radius);
+    padding: 14px 30px;
 }
