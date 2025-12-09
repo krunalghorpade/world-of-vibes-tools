@@ -1,7 +1,7 @@
 // auth.js - Authentication & User Database Management
 
 const DB_PREFIX = 'vibe_db_';
-const USERS_KEY = 'vibe_users';
+const USERS_KEY = 'users'; // Centralized Users DB
 const CURRENT_USER_KEY = 'vibe_current_user';
 
 // Helper to get all users
@@ -22,21 +22,14 @@ function signup(username, password, email) {
         username,
         password, // In a real app, hash this!
         email,
-        dbKey: DB_PREFIX + username, // Their private "database" key
+        artistId: null, // Will link to artist profile later
         joined: new Date().toISOString()
     };
 
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
 
-    // Initialize their private DB
-    localStorage.setItem(users[username].dbKey, JSON.stringify({
-        settings: {
-            theme: 'light',
-            notifications: true,
-            publicProfile: true
-        },
-        savedArtists: []
-    }));
+    // Auto login
+    login(username, password);
 
     return { success: true };
 }

@@ -5,7 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PROFILE - VIBE COLLAB</title>
+    <!-- Include main style and profile style -->
     <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/profile.css" />
     <script src="../js/auth.js"></script>
     <script src="../js/script.js"></script>
 </head>
@@ -27,9 +29,10 @@
         </div>
     </nav>
 
-    <div id="profile-container">
-        <!-- Injected by JS -->
-        <div style="text-align:center; padding: 100px;">LOADING...</div>
+    <!-- Main Profile Container -->
+    <div id="profile-container" class="profile-container-limit">
+        <!-- Loader -->
+        <div style="text-align:center; padding: 100px; color:var(--text-secondary);">LOADING PROFILE...</div>
     </div>
 
     <!-- Edit Button (Only visible if owner) -->
@@ -37,22 +40,68 @@
         ✎
     </div>
 
-    <!-- Edit Modal Overlay -->
+    <!-- Edit Modal Overlay (Simplified for brevity, would need expansion in real app) -->
     <div id="edit-modal"
         style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:200; align-items:center; justify-content:center;">
         <div class="form-wrapper"
-            style="background:var(--bg-card); padding:40px; border:1px solid var(--neon-green); width:90%; max-width:600px; max-height:90vh; overflow-y:auto;">
+            style="background:var(--bg-card); padding:40px; border:1px solid var(--neon-green); width:90%; max-width:600px; max-height:90vh; overflow-y:auto; border-radius:12px;">
             <h3>EDIT PROFILE</h3>
+            <p style="font-size:12px; margin-bottom:20px; color:gray;">(For this demo, only Bio/Tags are editable. Full
+                fields require backend.)</p>
             <form id="edit-form">
                 <div class="input-group">
                     <label>BIO</label>
                     <textarea id="edit-bio" rows="4"></textarea>
                 </div>
-                <div class="input-group">
-                    <label>SOCIALS (JSON format for now)</label>
-                    <input type="text" id="edit-socials" placeholder='{"instagram": "@..."}'>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div class="input-group">
+                        <label>CITY</label>
+                        <input type="text" id="edit-location-city">
+                    </div>
+                    <div class="input-group">
+                        <label>COUNTRY</label>
+                        <input type="text" id="edit-location-country">
+                    </div>
                 </div>
-                <!-- Needs/Offers editing could be added here, but sticking to basic info for this step -->
+
+                <div class="input-group">
+                    <label>WEBSITE</label>
+                    <input type="text" id="edit-website">
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div class="input-group">
+                        <label>DATE OF BIRTH</label>
+                        <input type="date" id="edit-dob">
+                    </div>
+                    <div class="input-group">
+                        <label>GENDER</label>
+                        <select id="edit-gender">
+                            <option value="Not Specified">Not Specified</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div class="input-group">
+                        <label>EMAIL</label>
+                        <input type="email" id="edit-email">
+                    </div>
+                    <div class="input-group">
+                        <label>PHONE</label>
+                        <input type="tel" id="edit-phone">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>INSTAGRAM HANDLE</label>
+                    <input type="text" id="edit-instagram">
+                </div>
+
                 <div class="input-group">
                     <label>NEEDS (Comma Separated)</label>
                     <input type="text" id="edit-wants">
@@ -74,20 +123,79 @@
     </footer>
 
     <script>
+        // Helper: Age Calculation
+        function calculateAge(dobString) {
+            if (!dobString) return '?';
+            const dob = new Date(dobString);
+            const diff_ms = Date.now() - dob.getTime();
+            const age_dt = new Date(diff_ms);
+            return Math.abs(age_dt.getUTCFullYear() - 1970);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            // Init Theme and Auth
+            initTheme();
+            updateNavForAuth();
+
             const params = new URLSearchParams(window.location.search);
-            const artistId = params.get('id');
+            let artistId = params.get('id'); // ID from URL
+
             const container = document.getElementById('profile-container');
             const editBtn = document.getElementById('edit-float-btn');
+            const editModal = document.getElementById('edit-modal');
+            const editForm = document.getElementById('edit-form');
 
-            // Check if looking at own profile
+            // Check current user
             let isOwner = false;
+            let currentUser = null;
+
             if (typeof getCurrentUser === 'function') {
-                const uData = getUserData();
-                if (uData && uData.artistId === artistId) {
-                    isOwner = true;
-                    editBtn.style.display = 'flex';
+                const storedUser = getCurrentUser();
+                if (storedUser) {
+                    // Refresh from central DB to be sure
+                    const allUsers = getUsers();
+                    currentUser = allUsers[storedUser.username];
+
+                    // If no artistId in param, AND logged in, maybe we redirect to own profile?
+                    // But usually clicking "HI USER" sends here with ID if it exists.
+                    // If param ID matches user's artistId, it's owner.
+                    if (currentUser && currentUser.artistId === artistId) {
+                        isOwner = true;
+                    }
                 }
+            }
+
+            // --- AUTO-CREATE PROFILE LOGIC (If missing) ---
+            // If user is logged in, but has no artistId, and lands here (maybe via generic link),
+            // OR if they are viewing a generic "my-profile" route (not implemented, but good safe guard).
+            // Let's assume if artistId is missing but we are logged in, we create one now.
+            if (!artistId && currentUser && !currentUser.artistId) {
+                // Create blank profile
+                const newId = 'u_' + Date.now();
+                const newArtist = {
+                    id: newId,
+                    name: currentUser.username, // Default to username
+                    username: currentUser.username,
+                    image: 'https://via.placeholder.com/150', // Default
+                    cover: 'https://via.placeholder.com/1600x400',
+                    bio: 'New Member',
+                    wants: [], skills: [], youtubeLinks: [], featuredImages: [], achievements: [],
+                    joined: new Date().toISOString()
+                };
+
+                // Save Artist
+                const allArtists = getAllArtists();
+                allArtists.unshift(newArtist); // Add to local DB
+                setAllArtists(allArtists);
+
+                // Link to User
+                const allUsers = getUsers();
+                allUsers[currentUser.username].artistId = newId;
+                localStorage.setItem(USERS_KEY, JSON.stringify(allUsers));
+
+                // Reload with new ID
+                window.location.href = `profile.html?id=${newId}`;
+                return;
             }
 
             if (!artistId) {
@@ -95,90 +203,181 @@
                 return;
             }
 
-            // We need to wait for script.js to mock data? Actually script.js runs on load.
-            // But we can't assume MOCK_DATA is ready if script.js deferred?
-            // script.js updates localStorage immediately.
-
-            const artist = getArtistById(artistId);
+            // Fetch Artist Data
+            const allArtists = getAllArtists();
+            const artist = allArtists.find(a => a.id === artistId);
 
             if (!artist) {
                 container.innerHTML = '<div style="text-align:center; padding:100px;">PROFILE NOT FOUND</div>';
                 return;
             }
 
-            // Render Profile
-            const socialsHtml = artist.socials ? Object.entries(artist.socials).map(([k, v]) => `
-                <a href="#" target="_blank">${k.toUpperCase()}</a>
-            `).join('') : '';
+            // If viewing own profile (validated by ID match now)
+            if (currentUser && currentUser.artistId === artistId) {
+                isOwner = true;
+                editBtn.style.display = 'flex';
+            }
 
-            const wantsHtml = (Array.isArray(artist.wants) ? artist.wants : []).map(w => `<div class="item-card">${w}</div>`).join('');
-            const skillsHtml = (Array.isArray(artist.skills) ? artist.skills : []).map(s => `<div class="item-card">${s}</div>`).join('');
+            // --- RENDER LOGIC --- //
+
+            const coverUrl = artist.cover || 'https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1600&q=80';
+            const locationStr = artist.location ? `${artist.location.city || ''}, ${artist.location.country || ''}` : 'Unknown Location';
+            const websiteStr = (artist.contact && artist.contact.website) ? artist.contact.website : '';
+            const dobStr = artist.dob || '';
+            const age = calculateAge(dobStr);
+
+            // Chips
+            const needsChips = (artist.wants || []).map(t => `<span class="chip need">NEED: ${t}</span>`).join('');
+            const offersChips = (artist.skills || []).map(t => `<span class="chip offer">OFFER: ${t}</span>`).join('');
+
+            // YouTube
+            const ytHtml = (artist.youtubeLinks || []).slice(0, 3).map(link => `
+                <div class="yt-container"><iframe src="${link}" allowfullscreen></iframe></div>
+            `).join('');
+
+            // Images
+            const imagesHtml = (artist.featuredImages || []).map(img => `<img src="${img}" class="featured-img" loading="lazy" />`).join('');
+
+            // Achievements
+            const achHTML = (artist.achievements || []).map(a => `
+                <div class="achievement-card"><span class="achievement-icon">🏆</span><span class="achievement-text">${a}</span></div>
+            `).join('');
+
+            // Contact
+            const contactEmail = (artist.contact && artist.contact.email) ? artist.contact.email : 'N/A';
+            const contactPhone = (artist.contact && artist.contact.phone) ? artist.contact.phone : 'N/A';
+            const gender = artist.gender || 'Not Specified';
+
+            // Action Buttons Logic
+            let actionButtons = '';
+            if (isOwner) {
+                // Settings button for owner
+                actionButtons = `
+                    <div class="profile-actions">
+                        <button class="action-btn" onclick="window.location.href='settings.html'">SETTINGS</button>
+                    </div>
+                `;
+            } else {
+                // Public actions
+                actionButtons = `
+                    <div class="profile-actions">
+                        <button class="action-btn">Message</button>
+                        <button class="action-btn primary">Follow</button>
+                    </div>
+                `;
+            }
+
+            // SVG Icons
+            const icoMap = '<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>';
+            const icoLink = '<svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>';
+            const icoCake = '<svg viewBox="0 0 24 24"><path d="M12 6a2 2 0 0 0-2-2 2 2 0 0 0-2 2h4m-2-6a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m4 8h-8v10h8V8m-2-6h-4v1h4V2z"/></svg>';
 
             container.innerHTML = `
-                <div class="profile-header">
-                    <img src="${artist.image}" class="profile-avatar" alt="${artist.name}" />
-                    <div class="profile-info">
+                <div class="profile-cover" style="background-image: url('${coverUrl}');"></div>
+                
+                <div class="profile-header-info">
+                    <img src="${artist.image}" class="profile-avatar-large" alt="${artist.name}">
+                    ${actionButtons}
+
+                    <div class="profile-name-block">
                         <h1>${artist.name}</h1>
-                        <p class="profile-bio">${artist.bio || 'No bio yet.'}</p>
-                        <div class="social-links">
-                            ${socialsHtml}
-                        </div>
+                        <span class="profile-handle">@${artist.username || artist.id}</span>
+                    </div>
+
+                    <div class="profile-bio">${artist.bio || 'No bio yet.'}</div>
+
+                    <div class="profile-meta-row">
+                        <div class="meta-item">${icoMap} ${locationStr}</div>
+                        ${websiteStr ? `<div class="meta-item">${icoLink} <a href="https://${websiteStr}" target="_blank">${websiteStr}</a></div>` : ''}
+                        <div class="meta-item">${icoCake} Born ${dobStr} (Age ${age})</div>
+                    </div>
+
+                    <div class="profile-stats">
+                        <div class="stat-item"><strong>1.2K</strong> Following</div>
+                        <div class="stat-item"><strong>4.5K</strong> Followers</div>
                     </div>
                 </div>
-                
-                <div class="profile-sections">
-                    <div class="profile-section-half">
-                        <h2>SEEKING</h2>
-                        ${wantsHtml}
-                    </div>
-                    <div class="profile-section-half">
-                        <h2>OFFERING</h2>
-                        ${skillsHtml}
+
+                <div class="profile-divider"></div>
+                <div class="profile-section"><h2>VIBE CHECK</h2><div class="chip-container">${needsChips}${offersChips}</div></div>
+                <div class="profile-section"><h2>TOP TRACKS</h2><div class="yt-grid">${ytHtml || '<p style="color:gray; font-size:12px;">No videos pinned.</p>'}</div></div>
+                <div class="profile-section"><h2>GALLERY</h2><div class="featured-grid">${imagesHtml || '<p style="color:gray; font-size:12px;">No images.</p>'}</div></div>
+                <div class="profile-section"><h2>ACHIEVEMENTS</h2><div class="achievements-grid">${achHTML || '<p style="color:gray; font-size:12px;">No achievements yet.</p>'}</div></div>
+
+                <div class="profile-section">
+                    <h2>DETAILS</h2>
+                    <div class="contact-grid">
+                        <div class="contact-item"><label>Gender</label><span>${gender}</span></div>
+                        <div class="contact-item"><label>Email</label><span>${contactEmail}</span></div>
+                        <div class="contact-item"><label>Phone</label><span>${contactPhone}</span></div>
+                         <div class="contact-item"><label>Instagram</label><span>${(artist.socials && artist.socials.instagram) ? artist.socials.instagram : 'N/A'}</span></div>
                     </div>
                 </div>
             `;
 
-            // Pre-fill edit form
+            // --- EDIT LOGIC ---
             if (isOwner) {
+                // Populate Edit Modal Fields
                 document.getElementById('edit-bio').value = artist.bio || '';
-                document.getElementById('edit-socials').value = JSON.stringify(artist.socials || {});
-                document.getElementById('edit-wants').value = Array.isArray(artist.wants) ? artist.wants.join(', ') : artist.wants;
-                document.getElementById('edit-skills').value = Array.isArray(artist.skills) ? artist.skills.join(', ') : artist.skills;
+                document.getElementById('edit-wants').value = (artist.wants || []).join(', ');
+                document.getElementById('edit-skills').value = (artist.skills || []).join(', ');
+                document.getElementById('edit-location-city').value = (artist.location && artist.location.city) || '';
+                document.getElementById('edit-location-country').value = (artist.location && artist.location.country) || '';
+                document.getElementById('edit-website').value = (artist.contact && artist.contact.website) || '';
+                document.getElementById('edit-dob').value = artist.dob || '';
+                document.getElementById('edit-gender').value = artist.gender || '';
+                document.getElementById('edit-email').value = (artist.contact && artist.contact.email) || '';
+                document.getElementById('edit-phone').value = (artist.contact && artist.contact.phone) || '';
+                document.getElementById('edit-instagram').value = (artist.socials && artist.socials.instagram) || '';
 
-                // Handle Save
-                document.getElementById('edit-form').addEventListener('submit', (e) => {
+                editForm.addEventListener('submit', (e) => {
                     e.preventDefault();
 
                     const newBio = document.getElementById('edit-bio').value;
-                    let newSocials = {};
-                    try {
-                        newSocials = JSON.parse(document.getElementById('edit-socials').value);
-                    } catch (err) {
-                        alert('Invalid JSON for socials. Saving basic info only.');
-                    }
-
                     const newWants = document.getElementById('edit-wants').value.split(',').map(s => s.trim()).filter(Boolean);
                     const newSkills = document.getElementById('edit-skills').value.split(',').map(s => s.trim()).filter(Boolean);
+                    const newLocationCity = document.getElementById('edit-location-city').value;
+                    const newLocationCountry = document.getElementById('edit-location-country').value;
+                    const newWebsite = document.getElementById('edit-website').value;
+                    const newDob = document.getElementById('edit-dob').value;
+                    const newGender = document.getElementById('edit-gender').value;
+                    const newEmail = document.getElementById('edit-email').value;
+                    const newPhone = document.getElementById('edit-phone').value;
+                    const newInstagram = document.getElementById('edit-instagram').value;
 
-                    // Update LocalStorage
+                    // Simple save
                     const all = getAllArtists();
                     const idx = all.findIndex(a => a.id === artistId);
                     if (idx !== -1) {
                         all[idx].bio = newBio;
-                        all[idx].socials = newSocials;
                         all[idx].wants = newWants;
                         all[idx].skills = newSkills;
+                        all[idx].location = {
+                            city: newLocationCity,
+                            country: newLocationCountry
+                        };
+                        all[idx].contact = {
+                            website: newWebsite,
+                            email: newEmail,
+                            phone: newPhone
+                        };
+                        all[idx].dob = newDob;
+                        all[idx].gender = newGender;
+                        all[idx].socials = {
+                            instagram: newInstagram
+                        };
+
                         setAllArtists(all);
                         alert('Profile Updated!');
                         location.reload();
                     }
                 });
             }
+
         });
 
-        function startEditing() {
-            document.getElementById('edit-modal').style.display = 'flex';
-        }
+        function startEditing() { document.getElementById('edit-modal').style.display = 'flex'; }
+
     </script>
 </body>
 

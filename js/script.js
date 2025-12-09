@@ -92,16 +92,28 @@ function updateNavForAuth() {
 
     if (user) {
         // User is logged in
+        // Get fresh user data including artistId from main DB
+        const allUsers = getUsers();
+        const freshUser = allUsers[user.username] || user;
+
         let profileLink = '#';
-        const userData = getUserData();
-        if (userData && userData.artistId) {
-            profileLink = `${pagesPrefix}profile.html?id=${userData.artistId}`;
+        if (freshUser.artistId) {
+            profileLink = `${pagesPrefix}profile.html?id=${freshUser.artistId}`;
+        } else {
+            // If no profile, we auto-create one or link to a setup page? 
+            // Requirement says "remove create profile", "add edit options in own profile".
+            // This implies if they don't have one, clicking "HI USER" should arguably create a blank one or go to a blank view.
+            // For now, let's link to profile.html with their username as ID to trigger a "New Profile" state logic if we add it.
+            // Or safer: Link to Settings.
+            profileLink = `${pagesPrefix}profile.html`;
         }
 
         authContainer.innerHTML = `
-            <a href="${pagesPrefix}create_profile.html" style="color:var(--neon-green);">+ CREATE</a>
-            <a href="${profileLink}">HI, ${user.username.toUpperCase()}</a>
-            <a href="${pagesPrefix}settings.html">SETTINGS</a>
+            <a href="${profileLink}" title="My Profile" style="display:flex; align-items:center;">
+                <svg style="width:24px;height:24px;" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </a>
             <a href="#" id="logout-btn">LOGOUT</a>
         `;
 
@@ -131,53 +143,68 @@ const MOCK_DATA = [
     {
         id: 'm1',
         name: 'NEON WAVE',
+        username: 'neonwave',
         wants: ['Vocals', 'Bass'],
         skills: ['Synth', 'Production'],
         image: 'https://images.unsplash.com/photo-1542596594-649edbc13630?q=80&w=1000&auto=format&fit=crop',
-        bio: 'We are a synth-pop duo inspired by the 80s and the future. Currently recording our debut album.',
-        socials: { instagram: '@neonwave', soundcloud: 'neonwave' }
+        cover: 'https://images.unsplash.com/photo-1558470598-a5dda9640f6b?auto=format&fit=crop&w=1600&q=80',
+        bio: 'We are a synth-pop duo inspired by the 80s and the future. Currently recording our debut album in Berlin.',
+        location: { city: 'Berlin', country: 'Germany' },
+        dob: '1995-04-12',
+        gender: 'Other',
+        contact: { email: 'contact@neonwave.com', phone: '+49 30 123456', website: 'neonwave.com' },
+        socials: { instagram: '@neonwave', soundcloud: 'neonwave' },
+        youtubeLinks: ['https://www.youtube.com/embed/5qap5aO4i9A', 'https://www.youtube.com/embed/5qap5aO4i9A', 'https://www.youtube.com/embed/5qap5aO4i9A'],
+        featuredImages: [
+            'https://images.unsplash.com/photo-1514525253440-b393452e8d26?auto=format&fit=crop&w=400&q=80',
+            'https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=400&q=80'
+        ],
+        achievements: ['Best Indie Pop 2024', '1M Streams', 'Tour Support']
     },
     {
         id: 'm2',
         name: 'LUNA ECHO',
+        username: 'lunaecho',
         wants: ['Guitar', 'Drums'],
         skills: ['Vocals', 'Songwriting'],
         image: 'https://images.unsplash.com/photo-1516280440614-6697288d5d38?q=80&w=1000&auto=format&fit=crop',
+        cover: 'https://images.unsplash.com/photo-1444464666168-49d633b86797?auto=format&fit=crop&w=1600&q=80',
         bio: 'Singer-songwriter looking to form a full band. Influences include Phoebe Bridgers and heavy reverb.',
-        socials: { instagram: '@lunaecho', spotify: 'Luna Echo' }
+        location: { city: 'London', country: 'UK' },
+        dob: '1998-08-22',
+        gender: 'Female',
+        contact: { email: 'luna@lunaecho.com', website: 'linktr.ee/lunaecho' },
+        socials: { instagram: '@lunaecho', spotify: 'Luna Echo' },
+        youtubeLinks: ['https://www.youtube.com/embed/5qap5aO4i9A'],
+        achievements: ['BBC Introducing', 'Sold Out O2 Academy']
     },
+    // ... Simplified other mocks for brevity but keeping structure
     {
-        id: 'm3',
-        name: 'VOID WALKER',
-        wants: ['Mixing', 'Mastering'],
-        skills: ['Sound Design', 'Foley'],
+        id: 'm3', name: 'VOID WALKER', username: 'voidwalker', wants: ['Mixing'], skills: ['Sound Design'],
         image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop',
+        cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80',
         bio: 'Sound designer for games and film. Exploring dark ambient textures.',
-        socials: { twitter: '@voidwalker_audio' }
+        location: { city: 'Tokyo', country: 'Japan' },
+        dob: '1992-01-15',
+        gender: 'Male',
+        contact: { twitter: '@voidwalker_audio' },
+        socials: { twitter: '@voidwalker_audio' },
+        youtubeLinks: [], featuredImages: [], achievements: []
     },
     {
-        id: 'm4',
-        name: 'ASTRAL BEAT',
-        wants: ['Rapper', 'Feature'],
-        skills: ['Beatmaking', 'Keys'],
+        id: 'm4', name: 'ASTRAL BEAT', username: 'astral', wants: ['Rapper'], skills: ['Beatmaking'],
         image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop',
         bio: 'Hip hop producer looking for unique flows.',
         socials: { soundcloud: 'astralbeat' }
     },
     {
-        id: 'm5',
-        name: 'SOLAR FLARE',
-        wants: ['Video Editor', 'VFX'],
-        skills: ['Rap', 'Performance'],
+        id: 'm5', name: 'SOLAR FLARE', username: 'solar', wants: ['VFX'], skills: ['Rap'],
         image: 'https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?q=80&w=1000&auto=format&fit=crop',
         bio: 'High energy performer. Need visuals that match the intensity.',
         socials: { instagram: '@solarflare_official' }
     },
     {
-        id: 'm6',
-        name: 'ECHO CHAMBER',
-        wants: ['Collab', 'Remix'],
-        skills: ['Ambient', 'Drone'],
+        id: 'm6', name: 'ECHO CHAMBER', username: 'echo', wants: ['Remix'], skills: ['Ambient'],
         image: 'https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?q=80&w=1000&auto=format&fit=crop',
         bio: 'Creating spaces with sound. Open to experimental collaborations.',
         socials: { bandcamp: 'echochamber.bandcamp.com' }
