@@ -88,10 +88,18 @@ function updateNavForAuth() {
     // Prefix for links TO pages/ from...
     // If in root: prefix = 'pages/'
     // If in pages: prefix = ''
+    // Prefix for links TO pages/ from...
+    // If in root: prefix = 'pages/'
+    // If in pages: prefix = ''
     const pagesPrefix = inPages ? '' : 'pages/';
 
-    if (user) {
-        // User is logged in
+    const isFeed = window.location.pathname.includes('feed.html');
+    const isLanding = !inPages && !isFeed;
+
+    // On Landing Page, we always show Join/Login buttons (Marketing View)
+    // On App pages (Feed/Profile), we show Profile Icon if logged in
+    if (user && !isLanding) {
+        // User is logged in AND we are in the App
         // Get fresh user data including artistId from main DB
         const allUsers = getUsers();
         const freshUser = allUsers[user.username] || user;
@@ -109,9 +117,9 @@ function updateNavForAuth() {
             </a>
         `;
     } else {
-        // Guest - Create Account Pill & Login
+        // Guest OR Landing Page - Join Now & Login
         authContainer.innerHTML = `
-            <a href="${pagesPrefix}signup.html" style="background:#FFF; color:#000; padding:10px 20px; border-radius:999px; text-decoration:none; font-weight:700; font-size:12px; margin-right:15px;">CREATE ACCOUNT</a>
+            <a href="${pagesPrefix}signup.html" style="background:#FFF; color:#000; padding:10px 20px; border-radius:999px; text-decoration:none; font-weight:700; font-size:12px; margin-right:15px;">JOIN NOW</a>
             <a href="${pagesPrefix}login.html" style="font-weight:600; font-size:13px; color:var(--text-primary);">LOGIN</a>
         `;
     }
