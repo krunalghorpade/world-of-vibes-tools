@@ -1,4 +1,4 @@
-/* Profile Page Specific Styles - Twitter-like Layout */
+/* Profile Page Specific Styles - Updated for OpenRoles Aesthetic */
 
 :root {
     --cover-height: 250px;
@@ -22,22 +22,11 @@ body {
     min-height: 100vh;
 }
 
-/* Cover Image */
-.profile-cover {
-    width: 100%;
-    height: var(--cover-height);
-    background-color: #333;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-}
 
 /* Header Info Wrapper */
 .profile-header-info {
     position: relative;
     padding: var(--spacing-std);
-    padding-top: calc(var(--avatar-size) / 2 + 10px);
-    /* Space for avatar */
     background: var(--bg-primary);
 }
 
@@ -46,12 +35,9 @@ body {
     width: var(--avatar-size);
     height: var(--avatar-size);
     border-radius: 50%;
-    border: var(--avatar-border) solid var(--bg-primary);
-    position: absolute;
-    top: calc(-1 * (var(--avatar-size) / 2));
-    left: var(--spacing-std);
     object-fit: cover;
     background: #000;
+    margin-bottom: 20px;
 }
 
 /* Action Bar (Edit/Message) */
@@ -65,24 +51,31 @@ body {
 
 .action-btn {
     border: 1px solid var(--border-color);
-    padding: 8px 16px;
-    border-radius: 999px;
-    font-weight: 700;
-    font-size: 14px;
+    padding: 8px 18px;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 13px;
     cursor: pointer;
     background: transparent;
     color: var(--text-primary);
-    transition: background 0.2s;
+    transition: all 0.2s;
+    letter-spacing: -0.01em;
 }
 
 .action-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: #262626;
+    border-color: #555;
 }
 
 .action-btn.primary {
-    background: var(--text-primary);
-    color: var(--bg-primary);
-    border: none;
+    background: #FFFFFF;
+    color: #000000;
+    border: 1px solid #FFFFFF;
+}
+
+.action-btn.primary:hover {
+    background: #E5E5E5;
+    border-color: #E5E5E5;
 }
 
 /* Text Info */
@@ -92,22 +85,27 @@ body {
 }
 
 .profile-name-block h1 {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 800;
     margin: 0;
-    line-height: 1.2;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
 }
 
 .profile-handle {
     color: var(--text-secondary);
-    font-size: 14px;
+    font-size: 15px;
+    font-family: monospace;
+    /* Tech feel */
 }
 
 .profile-bio {
     font-size: 15px;
-    line-height: 1.5;
+    line-height: 1.6;
     margin-bottom: 15px;
     white-space: pre-wrap;
+    max-width: 700px;
+    color: #CCC;
 }
 
 /* Metadata Row (Location, Website, DOB) */
@@ -116,25 +114,27 @@ body {
     flex-wrap: wrap;
     gap: 15px;
     color: var(--text-secondary);
-    font-size: 14px;
+    font-size: 13px;
     margin-bottom: 20px;
 }
 
 .meta-item {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
 }
 
 .meta-item a {
-    color: var(--brand-color);
-    text-decoration: none;
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: #444;
 }
 
 .meta-item svg {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     fill: currentColor;
+    opacity: 0.7;
 }
 
 /* Stats Row */
@@ -156,88 +156,99 @@ body {
 
 /* Sections Divider */
 .profile-divider {
-    height: 10px;
-    background: var(--bg-secondary);
-    /* Thicker divider */
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
+    height: 1px;
+    background: var(--border-color);
+    margin: 0;
+    border: none;
 }
 
 /* Generic Section Styles */
 .profile-section {
-    padding: var(--spacing-std);
+    padding: 30px var(--spacing-std);
     border-bottom: 1px solid var(--border-color);
 }
 
 .profile-section h2 {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 800;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     text-transform: uppercase;
     color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 10px;
+    letter-spacing: -0.02em;
 }
 
 /* Chips for Needs/Offers */
 .chip-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
 }
 
 .chip {
-    padding: 6px 14px;
-    background: var(--bg-card);
+    padding: 6px 16px;
+    background: transparent;
     border: 1px solid var(--border-color);
-    border-radius: 999px;
-    font-size: 13px;
+    border-radius: 9999px;
+    font-size: 12px;
     font-weight: 600;
+    color: var(--text-primary);
 }
 
 .chip.need {
-    border-color: #ff4757;
-    color: #ff6b81;
+    border-color: #FF3B30;
+    /* iOS Red */
+    color: #FF3B30;
 }
 
 .chip.offer {
-    border-color: #2ed573;
-    color: #2ed573;
+    border-color: #34C759;
+    /* iOS Green */
+    color: #34C759;
 }
 
 /* Achievements Grid */
 .achievements-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 15px;
 }
 
 .achievement-card {
-    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(20, 13, 79, 0.3) 100%);
-    padding: 15px;
+    background: var(--bg-card);
+    /* No gradient */
+    padding: 20px;
     border-radius: 8px;
     text-align: center;
     border: 1px solid var(--border-color);
+    transition: border-color 0.2s;
+}
+
+.achievement-card:hover {
+    border-color: #555;
 }
 
 .achievement-icon {
     font-size: 24px;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     display: block;
 }
 
 .achievement-text {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
 }
 
 /* YouTube Grid */
 .yt-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    gap: 15px;
 }
 
 .yt-container {
@@ -245,9 +256,10 @@ body {
     padding-bottom: 56.25%;
     /* 16:9 */
     height: 0;
-    background: #000;
-    border-radius: 8px;
+    background: #111;
+    border-radius: 6px;
     overflow: hidden;
+    border: 1px solid var(--border-color);
 }
 
 .yt-container iframe {
@@ -263,7 +275,7 @@ body {
 .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    gap: 20px;
     font-size: 14px;
 }
 
@@ -272,22 +284,25 @@ body {
     font-size: 10px;
     color: var(--text-secondary);
     text-transform: uppercase;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
 /* Featured Images */
 .featured-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 5px;
+    gap: 15px;
 }
 
 .featured-img {
     aspect-ratio: 1/1;
     width: 100%;
     object-fit: cover;
-    border-radius: 4px;
-    background: var(--bg-secondary);
+    border-radius: 6px;
+    background: #111;
+    border: 1px solid var(--border-color);
 }
 
 /* Responsive */

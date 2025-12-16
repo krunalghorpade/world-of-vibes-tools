@@ -50,6 +50,15 @@
                 fields require backend.)</p>
             <form id="edit-form">
                 <div class="input-group">
+                    <label>ARTIST NAME</label>
+                    <input type="text" id="edit-name">
+                </div>
+                <div class="input-group">
+                    <label>PROFILE IMAGE URL</label>
+                    <input type="text" id="edit-image">
+                </div>
+
+                <div class="input-group">
                     <label>BIO</label>
                     <textarea id="edit-bio" rows="4"></textarea>
                 </div>
@@ -118,8 +127,46 @@
         </div>
     </div>
 
+    <!-- Footer -->
     <footer>
-        <div class="copy">© 2025 VIBE COLLAB</div>
+        <div class="container"
+            style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:40px; padding-bottom:40px; border-bottom:1px solid var(--border-color);">
+            <div class="footer-col">
+                <h3 style="color:var(--text-primary); margin-bottom:20px;">VIBE COLLAB</h3>
+                <p style="color:var(--text-secondary); font-size:14px; line-height:1.6;">Connecting artists worldwide to
+                    create, collaborate, and inspire. Join the movement.</p>
+            </div>
+            <div class="footer-col">
+                <h4 style="color:var(--text-primary); margin-bottom:15px; font-weight:700;">COMPANY</h4>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <a href="#" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">About Us</a>
+                    <a href="#" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">Careers</a>
+                    <a href="#" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">Press</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4 style="color:var(--text-primary); margin-bottom:15px; font-weight:700;">SUPPORT</h4>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <a href="#" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">Help
+                        Center</a>
+                    <a href="#" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">Terms of
+                        Service</a>
+                    <a href="#" style="color:var(--text-secondary); text-decoration:none; font-size:14px;">Privacy
+                        Policy</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4 style="color:var(--text-primary); margin-bottom:15px; font-weight:700;">SOCIAL</h4>
+                <div style="display:flex; gap:15px;">
+                    <a href="#" style="color:var(--text-primary);">IG</a>
+                    <a href="#" style="color:var(--text-primary);">TW</a>
+                    <a href="#" style="color:var(--text-primary);">YT</a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center; padding-top:40px; color:var(--text-secondary); font-size:12px;">
+            © 2025 VIBE COLLAB. All rights reserved.
+        </div>
     </footer>
 
     <script>
@@ -273,7 +320,6 @@
             const icoCake = '<svg viewBox="0 0 24 24"><path d="M12 6a2 2 0 0 0-2-2 2 2 0 0 0-2 2h4m-2-6a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m4 8h-8v10h8V8m-2-6h-4v1h4V2z"/></svg>';
 
             container.innerHTML = `
-                <div class="profile-cover" style="background-image: url('${coverUrl}');"></div>
                 
                 <div class="profile-header-info">
                     <img src="${artist.image}" class="profile-avatar-large" alt="${artist.name}">
@@ -318,6 +364,8 @@
             // --- EDIT LOGIC ---
             if (isOwner) {
                 // Populate Edit Modal Fields
+                document.getElementById('edit-name').value = artist.name || '';
+                document.getElementById('edit-image').value = artist.image || '';
                 document.getElementById('edit-bio').value = artist.bio || '';
                 document.getElementById('edit-wants').value = (artist.wants || []).join(', ');
                 document.getElementById('edit-skills').value = (artist.skills || []).join(', ');
@@ -333,6 +381,8 @@
                 editForm.addEventListener('submit', (e) => {
                     e.preventDefault();
 
+                    const newName = document.getElementById('edit-name').value;
+                    const newImage = document.getElementById('edit-image').value;
                     const newBio = document.getElementById('edit-bio').value;
                     const newWants = document.getElementById('edit-wants').value.split(',').map(s => s.trim()).filter(Boolean);
                     const newSkills = document.getElementById('edit-skills').value.split(',').map(s => s.trim()).filter(Boolean);
@@ -349,6 +399,8 @@
                     const all = getAllArtists();
                     const idx = all.findIndex(a => a.id === artistId);
                     if (idx !== -1) {
+                        all[idx].name = newName;
+                        all[idx].image = newImage;
                         all[idx].bio = newBio;
                         all[idx].wants = newWants;
                         all[idx].skills = newSkills;

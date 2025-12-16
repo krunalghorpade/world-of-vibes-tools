@@ -5,6 +5,8 @@
     padding: 0;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 /* Typography & Colors Variables */
 :root {
     --brand-color: #140D4F;
@@ -12,32 +14,33 @@
     --accent-color: #140D4F;
     /* Replaces Neon Green */
 
-    --nav-height: 80px;
-    --font-heading: 'Helvetica Neue', sans-serif;
-    --font-body: 'Helvetica', sans-serif;
+    --nav-height: 70px;
+    /* Slightly tighter nav */
 
-    /* Palette: Slate Black & Chalk White */
-    --bg-primary: #1C1E22;
-    /* Slate Black */
-    --bg-secondary: #2B2B2B;
-    --bg-card: #26292E;
+    /* OpenRoles uses Inter */
+    --font-heading: 'Inter', sans-serif;
+    --font-body: 'Inter', sans-serif;
 
-    --text-primary: #F5F7FA;
-    /* Chalk White */
-    --text-secondary: #Aab2bd;
-    /* Muted Slate */
+    /* Deep Black Theme */
+    --bg-primary: #050505;
+    --bg-secondary: #0A0A0A;
+    --bg-card: #0A0A0A;
 
-    --border-color: #333333;
-    --input-border: #444444;
-    --input-active: #F5F7FA;
+    --text-primary: #EDEDED;
+    --text-secondary: #888888;
 
-    --btn-bg: #F5F7FA;
-    --btn-text: #140D4F;
-    --btn-hover-bg: #140D4F;
-    --btn-hover-text: #ffffff;
+    --border-color: #262626;
+    --input-border: #333333;
+    --input-active: #EDEDED;
+
+    /* High Contrast Buttons */
+    --btn-bg: #FFFFFF;
+    --btn-text: #000000;
+    --btn-hover-bg: #CCCCCC;
+    --btn-hover-text: #000000;
 
     --btn-radius: 9999px;
-    /* Full Rounded */
+    /* Pill */
 }
 
 /* Light Mode Overrides (Optional updates if needed, keeping standard) */
@@ -63,6 +66,8 @@ body {
     background-color: var(--bg-primary);
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
+    letter-spacing: -0.02em;
+    line-height: 1.5;
 }
 
 /* Top Announcement Bar - REMOVED */
@@ -77,40 +82,37 @@ nav {
     align-items: center;
     height: var(--nav-height);
     padding: 0 40px;
-    background: var(--bg-primary);
+    background: rgba(5, 5, 5, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     position: sticky;
     top: 0;
     z-index: 100;
     border-bottom: 1px solid var(--border-color);
-    transition: background-color 0.3s ease;
 }
 
 nav a {
     text-decoration: none;
     color: var(--text-primary);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
-    letter-spacing: 1px;
+    letter-spacing: 0;
     margin: 0 15px;
     text-transform: uppercase;
-    transition: color 0.2s;
+    transition: opacity 0.2s;
 }
 
 nav a:hover,
 nav a.active {
-    color: var(--accent-color);
-    /* Brand color highlight? It's dark, might be invisible on dark mode. */
-    /* If brand is #140D4F (Dark Blue), on #1C1E22 (Black), it is invisible. */
-    /* Use white or a lighter shade for hover in dark mode? */
-    /* Let's stick to Chalk White hover or text-secondary. */
     opacity: 0.7;
+    color: var(--text-primary);
 }
 
 /* Just override color for visibility */
-body:not(.light-mode) nav a:hover {
+/* Removed: body:not(.light-mode) nav a:hover {
     color: #fff;
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-}
+} */
 
 /* ... (Logo and Icon styles unchanged) ... */
 
@@ -138,9 +140,9 @@ body:not(.light-mode) nav a:hover {
 }
 
 .logo span {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 800;
-    letter-spacing: 2px;
+    letter-spacing: -0.03em;
 }
 
 .mobile-only {
@@ -164,10 +166,10 @@ body:not(.light-mode) nav a:hover {
 }
 
 .section-header h1 {
-    font-size: 2rem;
-    font-weight: 700;
+    font-size: 2.5rem;
+    font-weight: 800;
     margin-bottom: 15px;
-    letter-spacing: -1px;
+    letter-spacing: -0.04em;
     text-transform: uppercase;
     color: var(--text-primary);
 }
@@ -175,28 +177,28 @@ body:not(.light-mode) nav a:hover {
 .filter-toggles span {
     display: inline-block;
     cursor: pointer;
-    margin: 0 10px;
-    font-size: 13px;
+    margin: 0 12px;
+    font-size: 14px;
     color: var(--text-secondary);
     text-transform: uppercase;
     font-weight: 600;
     border-bottom: 2px solid transparent;
     padding-bottom: 4px;
-    transition: color 0.3s, border 0.3s;
+    transition: color 0.2s;
 }
 
 .filter-toggles span:hover,
 .filter-toggles span.active {
-    color: var(--accent-color);
-    border-bottom: 2px solid var(--accent-color);
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--text-primary);
 }
 
 /* Dark mode fix for accent visibility */
-body:not(.light-mode) .filter-toggles span:hover,
+/* Removed: body:not(.light-mode) .filter-toggles span:hover,
 body:not(.light-mode) .filter-toggles span.active {
     color: #fff;
     border-color: #fff;
-}
+} */
 
 /* Grid System - Updated to Flex/Grid 5 columns */
 .masonry-grid {
@@ -247,16 +249,15 @@ body:not(.light-mode) .filter-toggles span.active {
     background: var(--bg-card);
     margin-bottom: 20px;
     border: 1px solid var(--border-color);
-    transition: transform 0.3s, box-shadow 0.3s;
-    border-radius: 12px;
+    transition: border-color 0.2s, transform 0.2s;
+    border-radius: 8px;
     /* Slight rounding for cards */
     overflow: hidden;
 }
 
 .artist-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    border-color: #555;
 }
 
 .card-image-placeholder {
@@ -597,7 +598,9 @@ footer {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     cursor: pointer;
     z-index: 100;
-}/* Carousel Section with Bottom-Left Gradient Overlay and Text */
+}
+
+/* Carousel Section with Bottom-Left Gradient Overlay and Text */
 .hero-carousel {
     width: 100%;
     height: 75vh;

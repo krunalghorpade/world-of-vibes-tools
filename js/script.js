@@ -96,33 +96,23 @@ function updateNavForAuth() {
         const allUsers = getUsers();
         const freshUser = allUsers[user.username] || user;
 
-        let profileLink = '#';
-        if (freshUser.artistId) {
-            profileLink = `${pagesPrefix}profile.html?id=${freshUser.artistId}`;
-        } else {
-            // If no profile, we auto-create one or link to a setup page? 
-            // Requirement says "remove create profile", "add edit options in own profile".
-            // This implies if they don't have one, clicking "HI USER" should arguably create a blank one or go to a blank view.
-            // For now, let's link to profile.html with their username as ID to trigger a "New Profile" state logic if we add it.
-            // Or safer: Link to Settings.
-            profileLink = `${pagesPrefix}profile.html`;
-        }
 
+        // Link triggers profile view (auto-creates if missing)
+        const profileLink = freshUser.artistId ? `${pagesPrefix}profile.html?id=${freshUser.artistId}` : `${pagesPrefix}profile.html`;
+
+        // Only Profile Icon
         authContainer.innerHTML = `
-            <a href="${profileLink}" title="My Profile" style="display:flex; align-items:center;">
-                <svg style="width:24px;height:24px;" viewBox="0 0 24 24" fill="currentColor">
+            <a href="${profileLink}" title="My Profile" style="display:flex; align-items:center; color:var(--text-primary);">
+                <svg style="width:28px;height:28px;" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                 </svg>
             </a>
-            <a href="#" id="logout-btn">LOGOUT</a>
         `;
-
     } else {
-        // Guest
+        // Guest - Create Account Pill & Login
         authContainer.innerHTML = `
-            <a href="${pagesPrefix}signup.html" id="create-profile-link">JOIN US</a>
-            <a href="#">SEARCH</a>
-            <a href="${pagesPrefix}login.html">LOGIN</a>
+            <a href="${pagesPrefix}signup.html" style="background:#FFF; color:#000; padding:10px 20px; border-radius:999px; text-decoration:none; font-weight:700; font-size:12px; margin-right:15px;">CREATE ACCOUNT</a>
+            <a href="${pagesPrefix}login.html" style="font-weight:600; font-size:13px; color:var(--text-primary);">LOGIN</a>
         `;
     }
 
