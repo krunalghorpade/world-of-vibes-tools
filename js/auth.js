@@ -46,10 +46,33 @@ function login(username, password) {
     return { success: false, message: 'Invalid credentials' };
 }
 
+// Login with Google (Mock)
+function loginWithGoogle() {
+    // Simulate a successful Google login
+    const googleUser = {
+        username: 'google_user_' + Date.now(),
+        email: 'user@gmail.com',
+        artistId: null,
+        joined: new Date().toISOString(),
+        isGoogle: true
+    };
+
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(googleUser));
+    return { success: true, user: googleUser };
+}
+
+// Reset Password (Mock)
+function resetPassword(email) {
+    const users = getUsers();
+    // In a real app, strict checking. Here, just pretend.
+    return { success: true, message: `Password reset link sent to ${email}` };
+}
+
 // Logout
 function logout() {
     localStorage.removeItem(CURRENT_USER_KEY);
-    window.location.href = 'index.html';
+    const inPages = window.location.pathname.includes('/pages/');
+    window.location.href = inPages ? '../index.html' : 'index.html';
 }
 
 // Get Current User

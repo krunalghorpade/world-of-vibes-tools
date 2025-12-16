@@ -360,7 +360,7 @@ if (form) {
             alert('Profile Created!');
             // Determine path to index
             const inPages = window.location.pathname.includes('/pages/');
-            window.location.href = inPages ? '../index.html' : 'index.html';
+            window.location.href = inPages ? '../feed.html' : 'feed.html';
         }
     });
 }

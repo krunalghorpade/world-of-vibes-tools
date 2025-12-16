@@ -60,22 +60,146 @@
     <!-- Main Content Area -->
     <div class="container">
 
-        <!-- Filter/Title Section -->
-        <div class="section-header">
-            <h1 id="feed-title">LATEST PROFILES</h1>
-            <div class="filter-toggles">
-                <span class="active" onclick="filterBy('all')">ALL</span>
-                <span onclick="filterBy('needs')">SEEKING</span>
-                <span onclick="filterBy('offers')">OFFERING</span>
+        <!-- How It Works Section -->
+        <div class="landing-section" style="text-align:center; padding: 40px 0;">
+            <h1>CONNECT. COLLABORATE. CREATE.</h1>
+            <p
+                style="max-width: 600px; margin: 20px auto; font-size: 1.1rem; line-height: 1.6; color:var(--text-secondary);">
+                VIBE COLLAB is the ultimate network for artists, producers, and creators.
+                Find your missing piece, from vocalists to visual artists.
+            </p>
+
+            <div class="how-it-works-steps"
+                style="display:flex; justify-content:center; gap:30px; margin-top:40px; flex-wrap:wrap;">
+                <div class="step-card"
+                    style="background:var(--bg-secondary); padding:40px 30px; border-radius:15px; width:300px;">
+                    <div style="font-size:3rem; margin-bottom:20px;">🔍</div>
+                    <h3 style="margin-bottom:10px;">DISCOVER</h3>
+                    <p style="color:var(--text-secondary);">Browsable global directory of talented artists. Filter by
+                        skills, needs, and location.</p>
+                </div>
+                <div class="step-card"
+                    style="background:var(--bg-secondary); padding:40px 30px; border-radius:15px; width:300px;">
+                    <div style="font-size:3rem; margin-bottom:20px;">🤝</div>
+                    <h3 style="margin-bottom:10px;">CONNECT</h3>
+                    <p style="color:var(--text-secondary);">Directly message users who match your vibe. Form bands,
+                        projects, or just jam.</p>
+                </div>
+                <div class="step-card"
+                    style="background:var(--bg-secondary); padding:40px 30px; border-radius:15px; width:300px;">
+                    <div style="font-size:3rem; margin-bottom:20px;">🚀</div>
+                    <h3 style="margin-bottom:10px;">CREATE</h3>
+                    <p style="color:var(--text-secondary);">Combine your unique talents and launch your next big project
+                        to the world.</p>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div style="margin-top:80px; display:flex; justify-content:center; gap:60px; text-transform:uppercase;">
+                <div style="text-align:center;">
+                    <div style="font-size:2.5rem; font-weight:800; color:var(--text-primary);">10k+</div>
+                    <div style="font-size:12px; color:var(--text-secondary); letter-spacing:1px;">Artists Joined</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:2.5rem; font-weight:800; color:var(--text-primary);">50+</div>
+                    <div style="font-size:12px; color:var(--text-secondary); letter-spacing:1px;">Countries</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:2.5rem; font-weight:800; color:var(--text-primary);">100s</div>
+                    <div style="font-size:12px; color:var(--text-secondary); letter-spacing:1px;">Collabs Formed</div>
+                </div>
+            </div>
+
+            <!-- Features Breakdown -->
+            <div style="margin-top:100px; text-align:left; max-width:900px; margin-left:auto; margin-right:auto;">
+                <div style="display:flex; align-items:center; gap:50px; margin-bottom:80px; flex-wrap:wrap;">
+                    <div style="flex:1;">
+                        <h2 style="font-size:2rem; margin-bottom:20px; text-transform:uppercase;">Showcase Your Sound
+                        </h2>
+                        <p style="color:var(--text-secondary); line-height:1.6; margin-bottom:20px;">
+                            Your profile is your sonic resume. Embed your best tracks from YouTube, list your gear,
+                            and define exactly what you bring to the table.
+                        </p>
+                        <ul style="list-style:none; padding:0; color:var(--text-primary); font-weight:600;">
+                            <li style="margin-bottom:10px;">✓ Custom Artist Profile</li>
+                            <li style="margin-bottom:10px;">✓ Embed Music Videos</li>
+                            <li style="margin-bottom:10px;">✓ List 'Needs' & 'Offers'</li>
+                        </ul>
+                    </div>
+                    <div
+                        style="flex:1; height:300px; background:var(--bg-secondary); border-radius:12px; overflow:hidden;">
+                        <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=800&q=80"
+                            style="width:100%; height:100%; object-fit:cover; opacity:0.8;" alt="Studio">
+                    </div>
+                </div>
+
+                <div style="display:flex; align-items:center; gap:50px; flex-direction:row-reverse; flex-wrap:wrap;">
+                    <div style="flex:1;">
+                        <h2 style="font-size:2rem; margin-bottom:20px; text-transform:uppercase;">Find Your People</h2>
+                        <p style="color:var(--text-secondary); line-height:1.6; margin-bottom:20px;">
+                            Stop scrolling endlessly. Use our powerful filters to find a drummer in London,
+                            a producer in LA, or a vocalist who loves Synthwave.
+                        </p>
+                        <ul style="list-style:none; padding:0; color:var(--text-primary); font-weight:600;">
+                            <li style="margin-bottom:10px;">✓ Advanced Search Filters</li>
+                            <li style="margin-bottom:10px;">✓ Location Based Matching</li>
+                            <li style="margin-bottom:10px;">✓ Genre Specific Tags</li>
+                        </ul>
+                    </div>
+                    <div
+                        style="flex:1; height:300px; background:var(--bg-secondary); border-radius:12px; overflow:hidden;">
+                        <img src="https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=800&q=80"
+                            style="width:100%; height:100%; object-fit:cover; opacity:0.8;" alt="Band">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonials -->
+            <div style="margin-top:100px; margin-bottom:80px;">
+                <h2 style="margin-bottom:50px; text-transform:uppercase;">What Creators Say</h2>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:30px;">
+                    <div
+                        style="background:var(--bg-secondary); padding:30px; border-radius:12px; border:1px solid var(--border-color); text-align:left;">
+                        <div style="color:var(--brand-color); font-size:2rem; line-height:1;">“</div>
+                        <p style="font-style:italic; margin-bottom:20px; color:var(--text-secondary);">
+                            I found my bassist within 2 days of joining. We are now recording our first EP.
+                        </p>
+                        <div>
+                            <strong>ALEX R.</strong><br>
+                            <span style="font-size:10px; color:grey;">GUITARIST, BERLIN</span>
+                        </div>
+                    </div>
+                    <div
+                        style="background:var(--bg-secondary); padding:30px; border-radius:12px; border:1px solid var(--border-color); text-align:left;">
+                        <div style="color:var(--brand-color); font-size:2rem; line-height:1;">“</div>
+                        <p style="font-style:italic; margin-bottom:20px; color:var(--text-secondary);">
+                            Finally a platform that understands what musicians actually need. No clutter.
+                        </p>
+                        <div>
+                            <strong>SARAH J.</strong><br>
+                            <span style="font-size:10px; color:grey;">PRODUCER, LONDON</span>
+                        </div>
+                    </div>
+                    <div
+                        style="background:var(--bg-secondary); padding:30px; border-radius:12px; border:1px solid var(--border-color); text-align:left;">
+                        <div style="color:var(--brand-color); font-size:2rem; line-height:1;">“</div>
+                        <p style="font-style:italic; margin-bottom:20px; color:var(--text-secondary);">
+                            The quality of artists here is just higher than anywhere else.
+                        </p>
+                        <div>
+                            <strong>MIKE T.</strong><br>
+                            <span style="font-size:10px; color:grey;">VOCALIST, NY</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:60px;">
+                <h2 style="margin-bottom:20px;">READY TO VIBE?</h2>
+                <a href="pages/signup.html" class="cta-button">JOIN NOW</a>
+                <p style="margin-top:20px; font-size:12px; color:grey;">Free to join. Access thousands of profiles.</p>
             </div>
         </div>
-
-        <!-- Masonry Grid -->
-        <div class="masonry-grid" id="artist-list">
-            <!-- Cards injected by JS -->
-        </div>
-
-
 
     </div>
 

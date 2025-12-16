@@ -38,7 +38,14 @@
                     <input type="password" id="password" required />
                 </div>
                 <button type="submit">LOGIN</button>
-                <p style="margin-top:20px; font-size:11px;">NEW HERE? <a href="signup.html"
+                <button type="button" id="google-btn"
+                    style="background:#4285F4; color:#fff; border:none; margin-top:10px;">CONNECT WITH GOOGLE</button>
+
+                <div style="margin-top:20px; font-size:11px;">
+                    <a href="forgot_password.html" style="color:var(--text-secondary);">FORGOT PASSWORD?</a>
+                </div>
+
+                <p style="margin-top:10px; font-size:11px;">NEW HERE? <a href="signup.html"
                         style="color:var(--text-primary); font-weight:bold;">CREATE ACCOUNT</a></p>
             </form>
         </div>
@@ -58,10 +65,15 @@
 
             const res = login(user, pass);
             if (res.success) {
-                window.location.href = '../index.html';
+                window.location.href = '../feed.html';
             } else {
                 alert(res.message);
             }
+        });
+
+        document.getElementById('google-btn').addEventListener('click', () => {
+            const res = loginWithGoogle();
+            if (res.success) window.location.href = '../feed.html';
         });
     </script>
 </body>

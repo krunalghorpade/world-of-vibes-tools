@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MARINE VIBES – Collaborative Network</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo" onclick="window.location.href='index.html'" style="margin-left:0;">
+            <!-- Logo Icon removed from here -->
+            <span>VIBE COLLAB</span>
+        </div>
+
+        <div class="nav-right" style="display:flex; align-items:center; gap:20px;">
+            <!-- JS will inject Profile Icon OR 'Create Account' here -->
+            <div id="auth-links"></div>
+        </div>
+        <div class="mobile-menu-icon mobile-only">☰</div>
+    </nav>
+
+    <!-- Featured Creators Carousel -->
+    <!-- Featured Creators Carousel Removed for Feed Page -->
+    <div style="height: 40px;"></div>
+
+    <!-- Main Content Area -->
+    <div class="container">
+
+        <!-- Filter/Title Section -->
+        <div class="section-header">
+            <h1 id="feed-title">LATEST PROFILES</h1>
+            <div class="filter-toggles">
+                <span class="active" onclick="filterBy('all')">ALL</span>
+                <span onclick="filterBy('needs')">SEEKING</span>
+                <span onclick="filterBy('offers')">OFFERING</span>
+            </div>
+        </div>
+
+        <!-- Masonry Grid -->
+        <div class="masonry-grid" id="artist-list">
+            <!-- Cards injected by JS -->
+        </div>
+
+
+
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">NEWSLETTER</a>
+            <a href="#">CONTACT</a>
+            <a href="#">LEGAL</a>
+        </div>
+        <div class="copy">© 2025 VIBE COLLAB</div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

@@ -701,3 +701,33 @@ button,
     border-radius: var(--btn-radius);
     padding: 14px 30px;
 }
+
+/* Landing Page Specifics */
+.cta-button {
+    background: #fff;
+    color: #000;
+    padding: 20px 50px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 0.2s, background 0.2s;
+    display: inline-block;
+}
+
+.cta-button:hover {
+    transform: scale(1.05);
+    background: #ccc;
+}
+
+.step-card {
+    transition: transform 0.3s, background 0.3s;
+    border: 1px solid var(--border-color);
+}
+
+.step-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--text-primary);
+}

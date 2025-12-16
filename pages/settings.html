@@ -57,7 +57,10 @@
                 <button type="submit">SAVE CHANGES</button>
             </form>
 
-            <button id="clear-data-btn" style="margin-top:40px; background:red; border:none; color:white;">DELETE MY
+            <button id="logout-btn-body"
+                style="margin-top:20px; background:var(--bg-secondary); border:1px solid var(--border-color); color:var(--text-primary); width:100%; padding:14px; cursor:pointer; font-weight:700;">LOGOUT</button>
+
+            <button id="clear-data-btn" style="margin-top:20px; background:red; border:none; color:white;">DELETE MY
                 DATA</button>
         </div>
     </div>
@@ -105,6 +108,14 @@
             e.preventDefault();
             logout();
         };
+
+        const bodyLogout = document.getElementById('logout-btn-body');
+        if (bodyLogout) {
+            bodyLogout.onclick = (e) => {
+                e.preventDefault();
+                logout();
+            };
+        }
 
         // Delete Data
         document.getElementById('clear-data-btn').onclick = (e) => {

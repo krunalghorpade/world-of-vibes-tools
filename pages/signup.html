@@ -42,6 +42,9 @@
                     <input type="password" id="password" required />
                 </div>
                 <button type="submit">SIGN UP</button>
+                <button type="button" id="google-btn"
+                    style="background:#4285F4; color:#fff; border:none; margin-top:10px;">CONNECT WITH GOOGLE</button>
+
                 <p style="margin-top:20px; font-size:11px;">ALREADY HAVE AN ACCOUNT? <a href="login.html"
                         style="color:var(--text-primary); font-weight:bold;">LOGIN</a></p>
             </form>
@@ -67,10 +70,15 @@
             if (res.success) {
                 // Auto login
                 login(user, pass);
-                window.location.href = '../index.html';
+                window.location.href = '../feed.html';
             } else {
                 alert(res.message);
             }
+        });
+
+        document.getElementById('google-btn').addEventListener('click', () => {
+            const res = loginWithGoogle();
+            if (res.success) window.location.href = '../feed.html';
         });
     </script>
 </body>
